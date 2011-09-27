@@ -61,7 +61,17 @@ if [ -z "${FFTW3_DIR}" -o "${FFTW3_DIR}" = 'BUILD' ]; then
     NAME=fftw-3.2.2
     SRCDIR=$(dirname $0)
     BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
-    INSTALL_DIR=${SCRATCH_BUILD}/external/${THORN}
+    if [ -z "${FFTW3_INSTALL_DIR}" ]; then
+        echo "BEGIN MESSAGE"
+        echo "FFTW3 install directory, FFTW3_INSTALL_DIR, not set. Installing in the default configuration location. "
+        echo "END MESSAGE"
+     INSTALL_DIR=${SCRATCH_BUILD}/external/${THORN}
+    else
+        echo "BEGIN MESSAGE"
+        echo "FFTW3 install directory, FFTW3_INSTALL_DIR, selected. Installing FFTW3 at ${FFTW3_INSTALL_DIR} "
+        echo "END MESSAGE"
+     INSTALL_DIR=${FFTW3_INSTALL_DIR}
+    fi
     DONE_FILE=${SCRATCH_BUILD}/done/${THORN}
     FFTW3_DIR=${INSTALL_DIR}
     
