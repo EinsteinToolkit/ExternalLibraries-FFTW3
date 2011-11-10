@@ -51,7 +51,9 @@ fi
 # Build
 ################################################################################
 
-if [ -z "${FFTW3_DIR}" -o "${FFTW3_DIR}" = 'BUILD' ]; then
+if [ -z "${FFTW3_DIR}"                                                  \
+     -o "$(echo "${FFTW3_DIR}" | tr '[a-z]' '[A-Z]')" = 'BUILD' ]
+then
     echo "BEGIN MESSAGE"
     echo "Building FFTW3..."
     echo "END MESSAGE"
