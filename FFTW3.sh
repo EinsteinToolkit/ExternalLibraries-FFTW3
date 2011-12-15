@@ -5,7 +5,9 @@
 ################################################################################
 
 # Set up shell
-set -x                          # Output commands
+if [ "$(echo ${VERBOSE} | tr '[:upper:]' '[:lower:]')" = 'yes' ]; then
+    set -x                      # Output commands
+fi
 set -e                          # Abort on errors
 
 
@@ -16,7 +18,7 @@ set -e                          # Abort on errors
 
 if [ -z "${FFTW3_DIR}" ]; then
     echo "BEGIN MESSAGE"
-    echo "FFTW3 selected, but FFTW3_DIR not set.  Checking some places..."
+    echo "FFTW3 selected, but FFTW3_DIR not set. Checking some places..."
     echo "END MESSAGE"
     
     FILES="include/fftw3.h"
@@ -55,7 +57,7 @@ if [ -z "${FFTW3_DIR}"                                                  \
      -o "$(echo "${FFTW3_DIR}" | tr '[a-z]' '[A-Z]')" = 'BUILD' ]
 then
     echo "BEGIN MESSAGE"
-    echo "Building FFTW3..."
+    echo "Using bundled FFTW3..."
     echo "END MESSAGE"
     
     # Set locations
@@ -64,39 +66,39 @@ then
     SRCDIR=$(dirname $0)
     BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
     if [ -z "${FFTW3_INSTALL_DIR}" ]; then
-        echo "BEGIN MESSAGE"
-        echo "FFTW3 install directory, FFTW3_INSTALL_DIR, not set. Installing in the default configuration location. "
-        echo "END MESSAGE"
-     INSTALL_DIR=${SCRATCH_BUILD}/external/${THORN}
+        INSTALL_DIR=${SCRATCH_BUILD}/external/${THORN}
     else
         echo "BEGIN MESSAGE"
-        echo "FFTW3 install directory, FFTW3_INSTALL_DIR, selected. Installing FFTW3 at ${FFTW3_INSTALL_DIR} "
+        echo "Installing FFTW3 into ${FFTW3_INSTALL_DIR}"
         echo "END MESSAGE"
-     INSTALL_DIR=${FFTW3_INSTALL_DIR}
+        INSTALL_DIR=${FFTW3_INSTALL_DIR}
     fi
     DONE_FILE=${SCRATCH_BUILD}/done/${THORN}
     FFTW3_DIR=${INSTALL_DIR}
     
-(
-    exec >&2                    # Redirect stdout to stderr
-    set -x                      # Output commands
-    set -e                      # Abort on errors
-    cd ${SCRATCH_BUILD}
     if [ -e ${DONE_FILE} -a ${DONE_FILE} -nt ${SRCDIR}/dist/${NAME}.tar.gz \
                          -a ${DONE_FILE} -nt ${SRCDIR}/FFTW3.sh ]
     then
-        echo "FFTW3: The enclosed FFTW3 library has already been built; doing nothing"
+        echo "BEGIN MESSAGE"
+        echo "FFTW3 has already been built; doing nothing"
+        echo "END MESSAGE"
     else
-        echo "FFTW3: Building enclosed FFTW3 library"
+        echo "BEGIN MESSAGE"
+        echo "Building FFTW3"
+        echo "END MESSAGE"
         
-        # Should we use gmake or make?
-        MAKE=$(gmake --help > /dev/null 2>&1 && echo gmake || echo make)
-        # Should we use gtar or tar?
-        TAR=$(gtar --help > /dev/null 2> /dev/null && echo gtar || echo tar)
+        # Build in a subshell
+        (
+        exec >&2                # Redirect stdout to stderr
+        if [ "$(echo ${VERBOSE} | tr '[:upper:]' '[:lower:]')" = 'yes' ]; then
+            set -x              # Output commands
+        fi
+        set -e                  # Abort on errors
+        cd ${SCRATCH_BUILD}
         
         # Set up environment
         unset LIBS
-        if echo '' ${ARFLAGS} | grep 64 > /dev/null 2>&1; then
+        if echo '' ${ARFLAGS} | grep 64 >/dev/null 2>&1; then
             export OBJECT_MODE=64
         fi
         
@@ -123,18 +125,18 @@ then
         echo "FFTW3: Cleaning up..."
         rm -rf ${BUILD_DIR}
         
-        date > ${DONE_FILE}
+        date >${DONE_FILE}
         echo "FFTW3: Done."
+        
+        )
+        if (( $? )); then
+            echo 'BEGIN ERROR'
+            echo 'Error while building FFTW3. Aborting.'
+            echo 'END ERROR'
+            exit 1
+        fi
     fi
-)
-
-    if (( $? )); then
-        echo 'BEGIN ERROR'
-        echo 'Error while building FFTW3. Aborting.'
-        echo 'END ERROR'
-        exit 1
-    fi
-
+    
 fi
 
 
