@@ -97,7 +97,9 @@ then
         cd ${SCRATCH_BUILD}
         
         # Set up environment
+        export LDFLAGS
         unset LIBS
+        unset RPATH
         if echo '' ${ARFLAGS} | grep 64 >/dev/null 2>&1; then
             export OBJECT_MODE=64
         fi
