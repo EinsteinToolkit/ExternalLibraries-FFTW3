@@ -62,7 +62,7 @@ then
     
     # Set locations
     THORN=FFTW3
-    NAME=fftw-3.2.2
+    NAME=fftw-3.3
     SRCDIR=$(dirname $0)
     BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
     if [ -z "${FFTW3_INSTALL_DIR}" ]; then
