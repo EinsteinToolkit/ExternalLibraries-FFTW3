@@ -111,7 +111,7 @@ then
         
         echo "FFTW3: Unpacking archive..."
         pushd ${BUILD_DIR}
-        ${TAR} xzf ${SRCDIR}/dist/${NAME}.tar.gz
+        ${TAR?} xzf ${SRCDIR}/dist/${NAME}.tar.gz
         
         echo "FFTW3: Configuring..."
         cd ${NAME}
