@@ -155,7 +155,7 @@ else
     FFTW3_INC_DIRS="${FFTW3_DIR}/include"
     FFTW3_LIB_DIRS="${FFTW3_DIR}/lib"
 fi
-FFTW3_LIBS='fftw3'
+: ${FFTW3_LIBS='fftw3'}
 
 # Pass options to Cactus
 echo "BEGIN MAKE_DEFINITION"
