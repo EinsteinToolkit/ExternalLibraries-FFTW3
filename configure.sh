@@ -127,9 +127,8 @@ then
         echo "FFTW3: Cleaning up..."
         rm -rf ${BUILD_DIR}
         
-        date >${DONE_FILE}
+        date > ${DONE_FILE}
         echo "FFTW3: Done."
-        
         )
         if (( $? )); then
             echo 'BEGIN ERROR'
