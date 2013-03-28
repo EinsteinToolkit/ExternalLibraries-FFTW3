@@ -16,7 +16,9 @@ set -e                          # Abort on errors
 # Search
 ################################################################################
 
-if [ -z "${FFTW3_DIR}" ]; then
+if [ -z "${FFTW3_DIR}" \
+     -o "$(echo "${FFTW3_DIR}" | tr '[a-z]' '[A-Z]')" = 'NO_BUILD' ] 
+then
     echo "BEGIN MESSAGE"
     echo "FFTW3 selected, but FFTW3_DIR not set. Checking some places..."
     echo "END MESSAGE"
