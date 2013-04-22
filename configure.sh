@@ -11,31 +11,52 @@ fi
 set -e                          # Abort on errors
 
 
-
 ################################################################################
 # Search
 ################################################################################
 
-if [ -z "${FFTW3_DIR}" ]; then
+if [ -z "${FFTW3_DIR}" \
+     -o "$(echo "${FFTW3_DIR}" | tr '[a-z]' '[A-Z]')" = 'NO_BUILD' ]
+then
     echo "BEGIN MESSAGE"
     echo "FFTW3 selected, but FFTW3_DIR not set. Checking some places..."
     echo "END MESSAGE"
-    
-    FILES="include/fftw3.h"
-    DIRS="/usr /usr/local /usr/local/fftw3 /usr/local/packages/fftw3 /usr/local/apps/fftw3 ${HOME} c:/packages/fftw3"
+
+    DIRS="/usr /usr/local /usr/local/packages /usr/local/apps /opt/local ${HOME} c:/packages"
     for dir in $DIRS; do
-        FFTW3_DIR="$dir"
-        for file in $FILES; do
-            if [ ! -r "$dir/$file" ]; then
-                unset FFTW3_DIR
+      DIRS="$DIRS $dir/fftw3"
+    done
+    for dir in $DIRS; do
+        # libraries might have different file extensions
+        for libext in a so dylib; do
+            # libraries can be in /lib or /lib64
+            for libdir in lib64 lib/x86_64-linux-gnu lib lib/i386-linux-gnu; do
+                FILES="include/fftw3.h $libdir/libfftw3.$libext"
+                # assume this is the one and check all needed files
+                FFTW3_DIR="$dir"
+                for file in $FILES; do
+                    # discard this directory if one file was not found
+                    if [ ! -r "$dir/$file" ]; then
+                        unset FFTW3_DIR
+                        break
+                    fi
+                done
+                # don't look further if all files have been found
+                if [ -n "$FFTW3_DIR" ]; then
+                    break
+                fi
+            done
+            # don't look further if all files have been found
+            if [ -n "$FFTW3_DIR" ]; then
                 break
             fi
         done
+        # don't look further if all files have been found
         if [ -n "$FFTW3_DIR" ]; then
             break
         fi
     done
-    
+
     if [ -z "$FFTW3_DIR" ]; then
         echo "BEGIN MESSAGE"
         echo "FFTW3 not found"
