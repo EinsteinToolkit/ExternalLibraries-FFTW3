@@ -166,12 +166,11 @@ fi
 ################################################################################
 
 # Set options
-if [ "${FFTW3_DIR}" = '/usr' -o "${FFTW3_DIR}" = '/usr/local' ]; then
-    FFTW3_INC_DIRS=''
-    FFTW3_LIB_DIRS=''
-else
-    FFTW3_INC_DIRS="${FFTW3_DIR}/include"
-    FFTW3_LIB_DIRS="${FFTW3_DIR}/lib"
+if [ "${FFTW3_DIR}" != '/usr' -a "${FFTW3_DIR}" != '/usr/local' -a      \
+     "${FFTW3_DIR}" != 'NO_BUILD' ]
+then
+    : ${FFTW3_INC_DIRS="${FFTW3_DIR}/include"}
+    : ${FFTW3_LIB_DIRS="${FFTW3_DIR}/lib"}
 fi
 : ${FFTW3_LIBS='fftw3'}
 
