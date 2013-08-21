@@ -116,8 +116,8 @@ then
         cd ${SCRATCH_BUILD}
         
         # Set up environment
-        export LDFLAGS
-        unset LIBS
+        export LDFLAGS=$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' -L$libdir; done | sed -e 's/ -L-/ -/g'))
+        export LIBS=$(echo $(for lib in $LIBS; do echo '' -l$lib; done | sed -e 's/ -l-/ -/g'))
         unset RPATH
         if echo '' ${ARFLAGS} | grep 64 >/dev/null 2>&1; then
             export OBJECT_MODE=64
