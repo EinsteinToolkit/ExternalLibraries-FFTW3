@@ -99,7 +99,7 @@ then
     # Set locations
     THORN=FFTW3
     NAME=fftw-3.3.3
-    SRCDIR=$(dirname $0)
+    SRCDIR="$(dirname $0)"
     BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
     if [ -z "${FFTW3_INSTALL_DIR}" ]; then
         INSTALL_DIR=${SCRATCH_BUILD}/external/${THORN}
@@ -133,8 +133,8 @@ then
         cd ${SCRATCH_BUILD}
         
         # Set up environment
-        export LDFLAGS=$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' -L$libdir; done | sed -e 's/ -L-/ -/g'))
-        export LIBS=$(echo $(for lib in $LIBS; do echo '' -l$lib; done | sed -e 's/ -l-/ -/g'))
+        export LDFLAGS="$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' -L$libdir; done | sed -e 's/ -L-/ -/g'))"
+        export LIBS="$(echo $(for lib in $LIBS; do echo '' -l$lib; done | sed -e 's/ -l-/ -/g'))"
         unset RPATH
         if echo '' ${ARFLAGS} | grep 64 >/dev/null 2>&1; then
             export OBJECT_MODE=64
@@ -183,17 +183,17 @@ fi
 ################################################################################
 
 # Set options
-if [ "${FFTW3_DIR}" != '/usr' -a "${FFTW3_DIR}" != '/usr/local' -a      \
-     "${FFTW3_DIR}" != 'NO_BUILD' ]
-then
+if [ "${FFTW3_DIR}" != 'NO_BUILD' ]; then
     : ${FFTW3_INC_DIRS="${FFTW3_DIR}/include"}
     : ${FFTW3_LIB_DIRS="${FFTW3_DIR}/lib"}
 fi
 : ${FFTW3_LIBS='fftw3'}
 
+FFTW3_INC_DIRS="$(${CCTK_HOME}/lib/sbin/strip-incdirs.sh ${FFTW3_INC_DIRS})"
+FFTW3_LIB_DIRS="$(${CCTK_HOME}/lib/sbin/strip-libdirs.sh ${FFTW3_LIB_DIRS})"
+
 # Pass options to Cactus
 echo "BEGIN MAKE_DEFINITION"
-echo "HAVE_FFTW3     = 1"
 echo "FFTW3_DIR      = ${FFTW3_DIR}"
 echo "FFTW3_INC_DIRS = ${FFTW3_INC_DIRS}"
 echo "FFTW3_LIB_DIRS = ${FFTW3_LIB_DIRS}"
