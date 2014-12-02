@@ -133,7 +133,7 @@ then
         cd ${SCRATCH_BUILD}
         
         # Set up environment
-        export LDFLAGS="$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' -L$libdir; done | sed -e 's/ -L-/ -/g'))"
+        export LDFLAGS="$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' -L$libdir -Wl,-rpath,$libdir; done | sed -e 's/ -L-/ -/g;s/ -Wl,-rpath,-/ -/g'))"
         export LIBS="$(echo $(for lib in $LIBS; do echo '' -l$lib; done | sed -e 's/ -l-/ -/g'))"
         unset RPATH
         if echo '' ${ARFLAGS} | grep 64 >/dev/null 2>&1; then
