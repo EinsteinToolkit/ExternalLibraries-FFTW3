@@ -2,7 +2,10 @@
 
 PROVIDES FFTW3
 {
-  SCRIPT configure.sh
+  SCRIPT src/detect.sh
   LANG bash
   OPTIONS FFTW3_DIR FFTW3_INSTALL_DIR FFTW3_LIBS
 }
+
+# Pass configuration options to build script
+REQUIRES FFTW3
