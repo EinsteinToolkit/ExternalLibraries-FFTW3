@@ -29,7 +29,7 @@ DONE_FILE=${SCRATCH_BUILD}/done/${THORN}
 FFTW3_DIR=${INSTALL_DIR}
 
 # Set up environment
-# export LDFLAGS="$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' -L$libdir -Wl,-rpath,$libdir; done | sed -e 's/ -L-/ -/g;s/ -Wl,-rpath,-/ -/g'))"
+# export LDFLAGS="$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' ${LIBDIR_PREFIX}$libdir ${RUNDIR_PREFIX}$libdir; done | sed -e 's/ ${LIBDIR_PREFIX}-/ -/g;s/ ${RUNDIR_PREFIX}-/ -/g'))"
 # export LIBS="$(echo $(for lib in $LIBS; do echo '' -l$lib; done | sed -e 's/ -l-/ -/g'))"
 unset LIBS
 unset RPATH
