@@ -30,8 +30,8 @@ FFTW3_DIR=${INSTALL_DIR}
 
 # Set up environment
 # export LDFLAGS="$(echo $LDFLAGS $(for libdir in $LIBDIRS; do echo '' ${LIBDIR_PREFIX}$libdir ${RUNDIR_PREFIX}$libdir; done | sed -e 's/ ${LIBDIR_PREFIX}-/ -/g;s/ ${RUNDIR_PREFIX}-/ -/g'))"
-# export LIBS="$(echo $(for lib in $LIBS; do echo '' -l$lib; done | sed -e 's/ -l-/ -/g'))"
-unset LIBS
+# export LIBS="$(echo $(for lib in $LIBS; do echo '' -l$lib ''; done | sed -e 's/ -l-/ -/g;s/ -lfftw3 / /g'))"
+export LIBS='-lm'
 unset RPATH
 if echo '' ${ARFLAGS} | grep 64 >/dev/null 2>&1; then
     export OBJECT_MODE=64
