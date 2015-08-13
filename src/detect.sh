@@ -26,8 +26,8 @@ if [ -z "${FFTW3_DIR}" ]; then
     done
     for dir in $DIRS; do
         # libraries might have different file extensions
-        for libext in a so dylib; do
-            # libraries can be in /lib or /lib64
+        for libext in a dll dll.a dylib lib so; do
+            # libraries can be in lib or lib64 (or libx32?)
             for libdir in lib64 lib/x86_64-linux-gnu lib lib/i386-linux-gnu lib/arm-linux-gnueabihf; do
                 FILES="include/fftw3.h $libdir/libfftw3.$libext"
                 # assume this is the one and check all needed files
