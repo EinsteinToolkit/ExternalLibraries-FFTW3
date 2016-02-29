@@ -78,7 +78,7 @@ then
     echo "BEGIN MESSAGE"
     echo "Using bundled FFTW3..."
     echo "END MESSAGE"
-    
+
     # Check for required tools. Do this here so that we don't require
     # them when using the system library.
     if [ "x$TAR" = x ] ; then
@@ -126,6 +126,18 @@ fi
 # Pass configuration options to build script
 echo "BEGIN MAKE_DEFINITION"
 echo "FFTW3_INSTALL_DIR = ${FFTW3_INSTALL_DIR}"
+if [ -n "${MPI_DIR}" ]; then
+    echo "MPI_DIR      = ${MPI_DIR}"
+    echo "MPI_INC_DIRS = ${MPI_INC_DIRS}"
+    echo "MPI_LIB_DIRS = ${MPI_LIB_DIRS}"
+    echo "MPI_LIBS     = ${MPI_LIBS}"
+fi
+if [ -n "${HWLOC_DIR}" ]; then
+    echo "HWLOC_DIR      = ${HWLOC_DIR}"
+    echo "HWLOC_INC_DIRS = ${HWLOC_INC_DIRS}"
+    echo "HWLOC_LIB_DIRS = ${HWLOC_LIB_DIRS}"
+    echo "HWLOC_LIBS     = ${HWLOC_LIBS}"
+fi
 echo "END MAKE_DEFINITION"
 
 # Set options
@@ -133,7 +145,11 @@ if [ "${FFTW3_DIR}" != 'NO_BUILD' ]; then
     : ${FFTW3_INC_DIRS="${FFTW3_DIR}/include"}
     : ${FFTW3_LIB_DIRS="${FFTW3_DIR}/lib"}
 fi
-: ${FFTW3_LIBS='fftw3'}
+if [ -n "${MPI_DIR}" ]; then
+    : ${FFTW3_LIBS='fftw3_mpi fftw3'}
+else
+    : ${FFTW3_LIBS='fftw3'}
+fi
 
 FFTW3_INC_DIRS="$(${CCTK_HOME}/lib/sbin/strip-incdirs.sh ${FFTW3_INC_DIRS})"
 FFTW3_LIB_DIRS="$(${CCTK_HOME}/lib/sbin/strip-libdirs.sh ${FFTW3_LIB_DIRS})"

@@ -47,7 +47,17 @@ ${TAR?} xzf ${SRCDIR}/../dist/${NAME}.tar.gz
 
 echo "FFTW3: Configuring..."
 cd ${NAME}
-./configure --prefix=${FFTW3_DIR}
+enable_mpi=''
+mpilibs=''
+if [ -n "${MPI_DIR}" ]; then
+    enable_mpi='--enable-mpi'
+    if [ -e "${MPI_DIR}/bin/mpicc" ]; then
+        enable_mpi="$enable_mpi MPICC=${MPI_DIR}/bin/mpicc"
+        mpilibs="$(echo '' $(for dir in ${MPI_LIB_DIRS} ${HWLOC_LIB_DIRS}; do echo " -L$dir -Wl,-rpath,$dir"; done) $(for lib in ${MPI_LIBS} ${HWLOC_LIBS}; do echo " -l$lib"; done))"
+    fi
+fi
+echo ./configure --prefix=${FFTW3_DIR} ${enable_mpi} MPILIBS="${mpilibs}"
+./configure --prefix=${FFTW3_DIR} ${enable_mpi} MPILIBS="${mpilibs}"
 
 echo "FFTW3: Building..."
 ${MAKE}

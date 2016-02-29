@@ -1,6 +1,8 @@
 # Main make.code.deps file for thorn FFTW3
 
 export FFTW3_INSTALL_DIR
+export MPI_DIR MPI_INC_DIRS MPI_LIB_DIRS MPI_LIBS
+export HWLOC_DIR HWLOC_INC_DIRS HWLOC_LIB_DIRS HWLOC_LIBS
 
 $(CCTK_TARGET) $(OBJS) $(SRCS:%=%.d): $(SCRATCH_BUILD)/done/$(THORN)
 $(SCRATCH_BUILD)/done/$(THORN): $(SRCDIR)/build.sh
