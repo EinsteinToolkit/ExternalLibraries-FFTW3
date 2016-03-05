@@ -1,7 +1,8 @@
 #! /usr/bin/perl
 
 use strict;
-use File::Path 'make_path';
+use Carp;                       # 'confess', similar to 'die'
+use File::Path 'mkpath';
 use File::Spec;
 use POSIX;
 
@@ -50,7 +51,7 @@ if ($ENV{FFTW3_DIR} eq 'BUILD') {
     my @libexts = ("a", "dll", "dll.a", "dylib", "lib", "so");
     my @need_includes = ("fftw3.h");
     my @need_libs = ("fftw3");
-    for my $dir (@dirs) {
+  FINDLIB: for my $dir (@dirs) {
         for my $subdir (@subdirs) {
             # libraries can be in lib or lib64 (or libx32?)
             for my $libdir (@libdirs) {
@@ -74,13 +75,12 @@ if ($ENV{FFTW3_DIR} eq 'BUILD') {
                     }
                     # don't look further if all files have been found
                     if (defined $install_dir) {
-                        goto DONE;
+                        last FINDLIB;
                     }
                 }
             }
         }
     }
-  DONE:
 
     if (!defined $install_dir) {
         $do_build = 1;
@@ -102,9 +102,9 @@ if ($ENV{FFTW3_DIR} eq 'BUILD') {
 
 # If we will set options and don't build, $install_dir must now be set
 if ($do_build) {
-    defined $install_dir and die;
+    defined $install_dir and confess "Internal inconsistency";
 } else {
-    defined $install_dir or die;
+    defined $install_dir or confess "Internal inconsistency";
 }
 
 
@@ -155,7 +155,7 @@ if ($do_build) {
         unshift @libs, "fftw3_mpi";
     }
 } else {
-    $install_dir eq '' and die;
+    $install_dir eq '' and confess "Internal inconsistency";
     if ($do_set_options) {
         @inc_dirs = split '', $ENV{FFTW3_INC_DIRS};
         @lib_dirs = split '', $ENV{FFTW3_LIB_DIRS};
@@ -177,11 +177,11 @@ if ($do_build) {
         @lib_dirs = ();
         @libs = ();
     }
-    
+
     my $done_dir = "$ENV{SCRATCH_BUILD}/done";
-    make_path $done_dir;
+    mkpath $done_dir;
     my $done_file = "${done_dir}/${thorn}";
-    open (my $fh, '>', $done_file) or die;
+    open (my $fh, '>', $done_file) or confess "Could not open file";
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
         localtime(time);
     print $fh strftime "%F %T\n", $sec,$min,$hour,$mday,$mon,$year;
