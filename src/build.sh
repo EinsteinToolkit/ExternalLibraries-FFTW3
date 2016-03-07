@@ -56,8 +56,7 @@ if [ -n "${MPI_DIR}" ]; then
         mpilibs="$(echo '' $(for dir in ${MPI_LIB_DIRS} ${HWLOC_LIB_DIRS}; do echo " -L$dir -Wl,-rpath,$dir"; done) $(for lib in ${MPI_LIBS} ${HWLOC_LIBS}; do echo " -l$lib"; done))"
     fi
 fi
-echo ./configure --prefix=${FFTW3_DIR} ${enable_mpi} MPILIBS="${mpilibs}"
-./configure --prefix=${FFTW3_DIR} ${enable_mpi} MPILIBS="${mpilibs}"
+./configure --prefix=${FFTW3_DIR} ${enable_mpi} --enable-threads MPILIBS="${mpilibs}"
 
 echo "FFTW3: Building..."
 ${MAKE}

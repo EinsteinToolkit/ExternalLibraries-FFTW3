@@ -150,7 +150,7 @@ if ($do_build) {
 
     @inc_dirs = ("${install_dir}/include");
     @lib_dirs = ("${install_dir}/lib");
-    @libs = ("fftw3");
+    @libs = ("fftw3_threads", "fftw3");
     if ($ENV{MPI_DIR} ne '') {
         unshift @libs, "fftw3_mpi";
     }
@@ -167,7 +167,7 @@ if ($do_build) {
             @lib_dirs = ("${install_dir}/lib");
         }
         if (!@libs) {
-            @libs = ("fftw3");
+            @libs = ("fftw3_threads", "fftw3");
             if ($ENV{MPI_DIR} ne '') {
                 unshift @libs, "fftw3_mpi";
             }

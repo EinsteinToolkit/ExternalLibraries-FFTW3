@@ -146,9 +146,9 @@ if [ "${FFTW3_DIR}" != 'NO_BUILD' ]; then
     : ${FFTW3_LIB_DIRS="${FFTW3_DIR}/lib"}
 fi
 if [ -n "${MPI_DIR}" ]; then
-    : ${FFTW3_LIBS='fftw3_mpi fftw3'}
+    : ${FFTW3_LIBS='fftw3_mpi fftw3_threads fftw3'}
 else
-    : ${FFTW3_LIBS='fftw3'}
+    : ${FFTW3_LIBS='fftw3_threads fftw3'}
 fi
 
 FFTW3_INC_DIRS="$(${CCTK_HOME}/lib/sbin/strip-incdirs.sh ${FFTW3_INC_DIRS})"
