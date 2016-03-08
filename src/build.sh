@@ -14,7 +14,7 @@ set -e                          # Abort on errors
 
 # Set locations
 THORN=FFTW3
-NAME=fftw-3.3.3
+NAME=fftw-3.3.4
 SRCDIR="$(dirname $0)"
 BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
 if [ -z "${FFTW3_INSTALL_DIR}" ]; then
