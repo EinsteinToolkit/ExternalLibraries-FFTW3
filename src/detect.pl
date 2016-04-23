@@ -157,9 +157,9 @@ if ($do_build) {
 } else {
     $install_dir eq '' and confess "Internal inconsistency";
     if ($do_set_options) {
-        @inc_dirs = split '', $ENV{FFTW3_INC_DIRS};
-        @lib_dirs = split '', $ENV{FFTW3_LIB_DIRS};
-        @libs = split '', $ENV{FFTW3_LIBS};
+        @inc_dirs = split ' ', $ENV{FFTW3_INC_DIRS};
+        @lib_dirs = split ' ', $ENV{FFTW3_LIB_DIRS};
+        @libs = split ' ', $ENV{FFTW3_LIBS};
         if (!@inc_dirs) {
             @inc_dirs = ("${install_dir}/include");
         }
@@ -181,11 +181,13 @@ if ($do_build) {
     my $done_dir = "$ENV{SCRATCH_BUILD}/done";
     mkpath $done_dir;
     my $done_file = "${done_dir}/${thorn}";
-    open (my $fh, '>', $done_file) or confess "Could not open file";
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-        localtime(time);
-    print $fh strftime "%F %T\n", $sec,$min,$hour,$mday,$mon,$year;
-    close $fh;
+    if (! -e $done_file) {
+        open (my $fh, '>', $done_file) or confess "Could not open file";
+        my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+            localtime(time);
+        print $fh strftime "%F %T\n", $sec,$min,$hour,$mday,$mon,$year;
+        close $fh;
+    }
 }
 
 
@@ -228,6 +230,6 @@ print "FFTW3_LIBS     = " . (join ' ', @libs) . "\n";
 print "END MAKE_DEFINITION\n";
 
 print "INCLUDE_DIRECTORY         \$(FFTW3_INC_DIRS)\n";
-print "INCLUDE_DIRECTORY_FORTRAN \$(FFTW3_INC_DIRS) /usr/include\n";
+print "INCLUDE_DIRECTORY_FORTRAN \$(FFTW3_INC_DIRS) \$(FFTW3_LIB_DIRS) /usr/include\n";
 print "LIBRARY_DIRECTORY         \$(FFTW3_LIB_DIRS)\n";
 print "LIBRARY                   \$(FFTW3_LIBS)\n";

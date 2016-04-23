@@ -113,8 +113,10 @@ then
 else
     THORN=FFTW3
     DONE_FILE=${SCRATCH_BUILD}/done/${THORN}
-    mkdir ${SCRATCH_BUILD}/done 2> /dev/null || true
-    date > ${DONE_FILE}
+    if [ ! -e ${DONE_FILE} ]; then
+        mkdir ${SCRATCH_BUILD}/done 2> /dev/null || true
+        date > ${DONE_FILE}
+    fi
 fi
 
 
