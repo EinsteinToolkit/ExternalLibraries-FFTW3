@@ -29,6 +29,8 @@ DONE_FILE=${SCRATCH_BUILD}/done/${THORN}
 FFTW3_DIR=${INSTALL_DIR}
 
 # Set up environment
+export CPPFLAGS="${CPPFLAGS} $(echo $(for dir in ${SYS_INC_DIRS}; do echo '' -I${dir}; done))"
+export LDFLAGS="${LDFLAGS} $(echo $(for dir in ${LIBDIRS}; do echo '' -L${dir} -Wl,-rpath,${dir}; done))"
 export LIBS='-lm'
 unset RPATH
 if echo '' ${ARFLAGS} | grep 64 >/dev/null 2>&1; then
