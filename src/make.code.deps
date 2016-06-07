@@ -3,5 +3,8 @@
 export FFTW3_INSTALL_DIR
 
 $(CCTK_TARGET) $(OBJS) $(SRCS:%=%.d): $(SCRATCH_BUILD)/done/$(THORN)
+
+ifneq ($(FFTW3_BUILD),)
 $(SCRATCH_BUILD)/done/$(THORN): $(SRCDIR)/build.sh
 	+$(SRCDIR)/build.sh
+endif

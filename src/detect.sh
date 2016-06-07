@@ -66,6 +66,8 @@ if [ -z "${FFTW3_DIR}" ]; then
     fi
 fi
 
+THORN=FFTW3
+
 
 
 ################################################################################
@@ -99,7 +101,6 @@ then
     fi
 
     # Set locations
-    THORN=FFTW3
     BUILD_DIR=${SCRATCH_BUILD}/build/${THORN}
     if [ -z "${FFTW3_INSTALL_DIR}" ]; then
         INSTALL_DIR=${SCRATCH_BUILD}/external/${THORN}
@@ -109,12 +110,15 @@ then
         echo "END MESSAGE"
         INSTALL_DIR=${FFTW3_INSTALL_DIR}
     fi
+    FFTW3_BUILD=1
     FFTW3_DIR=${INSTALL_DIR}
 else
-    THORN=FFTW3
+    FFTW3_BUILD=
     DONE_FILE=${SCRATCH_BUILD}/done/${THORN}
-    mkdir ${SCRATCH_BUILD}/done 2> /dev/null || true
-    date > ${DONE_FILE}
+    if [ ! -e ${DONE_FILE} ]; then
+        mkdir ${SCRATCH_BUILD}/done 2> /dev/null || true
+        date > ${DONE_FILE}
+    fi
 fi
 
 
@@ -125,6 +129,7 @@ fi
 
 # Pass configuration options to build script
 echo "BEGIN MAKE_DEFINITION"
+echo "FFTW3_BUILD       = ${FFTW3_BUILD}"
 echo "FFTW3_INSTALL_DIR = ${FFTW3_INSTALL_DIR}"
 echo "END MAKE_DEFINITION"
 
@@ -148,5 +153,5 @@ echo "END MAKE_DEFINITION"
 
 echo 'INCLUDE_DIRECTORY         $(FFTW3_INC_DIRS)'
 echo 'INCLUDE_DIRECTORY_FORTRAN $(FFTW3_INC_DIRS) /usr/include'
-echo 'LIBRARY_DIRECTORY $(FFTW3_LIB_DIRS)'
-echo 'LIBRARY           $(FFTW3_LIBS)'
+echo 'LIBRARY_DIRECTORY         $(FFTW3_LIB_DIRS)'
+echo 'LIBRARY                   $(FFTW3_LIBS)'
