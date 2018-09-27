@@ -49,7 +49,9 @@ ${TAR?} xzf ${SRCDIR}/../dist/${NAME}.tar.gz
 
 echo "FFTW3: Configuring..."
 cd ${NAME}
-./configure --prefix=${FFTW3_DIR}
+# force libdir so that it does not change from lib to lib64 and we can refer to
+# it in detect.sh
+./configure --prefix=${FFTW3_DIR} --libdir=${FFTW3_DIR}/lib
 
 echo "FFTW3: Building..."
 ${MAKE}
