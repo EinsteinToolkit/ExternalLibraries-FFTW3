@@ -20,7 +20,7 @@ if [ -z "${FFTW3_DIR}" ]; then
     echo "FFTW3 selected, but FFTW3_DIR not set. Checking some places..."
     echo "END MESSAGE"
 
-    DIRS="/usr /usr/local /usr/local/packages /usr/local/apps /opt/local ${HOME} c:/packages"
+    DIRS="/usr /usr/local /usr/local/packages /usr/local/apps /opt/local /opt/homebrew ${HOME} c:/packages"
     for dir in $DIRS; do
       DIRS="$DIRS $dir/fftw3"
     done
